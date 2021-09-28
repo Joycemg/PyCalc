@@ -33,9 +33,16 @@ class MiVentana(QMainWindow):
         self.posicion = 0
 
     def resultado(self):
-        igual = eval(self.expresiones)
-        self.display.setText(str(igual))
-        self.expresiones = ''
+
+        try:
+         # getting the ans
+            igual = eval(self.expresiones)
+            self.display.setText(str(igual))
+            self.expresiones = ''
+        except:
+            # setting text to the label
+            self.display.setText("ERROR")
+
 
     def moverseDerecha(self):
         self.display.setSelection(self.display.cursorPosition(), 1)
