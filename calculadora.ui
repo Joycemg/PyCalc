@@ -318,7 +318,7 @@
       </widget>
      </item>
      <item row="1" column="0" colspan="5">
-      <widget class="QLineEdit" name="caja">
+      <widget class="QLineEdit" name="display">
        <property name="font">
         <font>
          <family>Noto Sans</family>

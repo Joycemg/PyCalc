@@ -6,12 +6,12 @@ class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("calculadora.ui", self)
-        # self.backup.textChanged.connect(self.agregar_digito)
-        # self.boton1.clicked.connect(self.set_text_backup)
+            # self.backup.textChanged.connect(self.agregar_digito)
+        self.botonC.clicked.connect(self._limpiarDisplay)
 
-    def set_text_backup(self):
-        self.backup.setText("")
-        self.backup.setText("1")
+    def _limpiarDisplay(self):
+        self.display.setText('')
+        self.display.setFocus()
 
     def agregar_digito(self):
         self.Calculo.setText(self.Calculo.text() + self.backup.text())
