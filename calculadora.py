@@ -15,6 +15,8 @@ class MiVentana(QMainWindow):
         self.botonMenos.clicked.connect(lambda:self.setDisplayText("-"))
         self.botonMulti.clicked.connect(lambda:self.setDisplayText("*"))
         self.botonDivision.clicked.connect(lambda:self.setDisplayText("/"))
+        self.pareIz.clicked.connect(lambda:self.setDisplayText("("))
+        self.pareDe.clicked.connect(lambda:self.setDisplayText(")"))
         self.boton1.clicked.connect(lambda:self.setDisplayText("1"))
         self.boton2.clicked.connect(lambda:self.setDisplayText("2"))
         self.boton3.clicked.connect(lambda:self.setDisplayText("3"))
@@ -30,10 +32,8 @@ class MiVentana(QMainWindow):
         self.botonResu.clicked.connect(self.resultado)
         # self.botonResu.clicked.connect()
         self.expresiones = ''
-        self.posicion = 0
 
     def resultado(self):
-
         try:
             igual = eval(self.expresiones)
             self.display.setText(str(igual))
