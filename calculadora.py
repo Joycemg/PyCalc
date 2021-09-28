@@ -24,17 +24,35 @@ class MiVentana(QMainWindow):
         self.boton7.clicked.connect(lambda:self.setDisplayText("7"))
         self.boton8.clicked.connect(lambda:self.setDisplayText("8"))
         self.boton9.clicked.connect(lambda:self.setDisplayText("9"))
+        self.botonX.clicked.connect(self.borrarDigito)
+        self.derecha.clicked.connect(self.moverseDerecha)
+        self.izquierda.clicked.connect(self.moverseIzquierda)
         # self.botonResu.clicked.connect()
         self.expresiones = ''
 
 
+    def moverseDerecha(self):
+        self.display.setSelection(self.display.cursorPosition(), 1)
+    
+    def moverseIzquierda(self):
+        self.display.setSelection(self.display.cursorPosition(), -1)
+
+
+        
 
     def limpiarDisplay(self):
-        self.display.setText('')
+        self.display.clear()
         self.expresiones = ''
+
+    def borrarDigito(self):
+        self.display.backspace()
+        self.display.setFocus()
+        self.expresiones = self.display.text()
+        self.display.setText(self.expresiones)
 
     def setDisplayText(self, text):
         self.display.setText(text)
+        self.display.setFocus()
         self.expresiones = self.expresiones + self.display.text()
         self.display.setText(self.expresiones)
 
