@@ -35,13 +35,12 @@ class MiVentana(QMainWindow):
     def resultado(self):
 
         try:
-         # getting the ans
             igual = eval(self.expresiones)
             self.display.setText(str(igual))
             self.expresiones = ''
         except:
-            # setting text to the label
             self.display.setText("ERROR")
+            self.expresiones = ''
 
 
     def moverseDerecha(self):
