@@ -13,8 +13,8 @@ class MiVentana(QMainWindow):
         self.botonPunto.clicked.connect(lambda:self.setDisplayText("."))
         self.botonSuma.clicked.connect(lambda:self.setDisplayText("+"))
         self.botonMenos.clicked.connect(lambda:self.setDisplayText("-"))
-        self.botonMulti.clicked.connect(lambda:self.setDisplayText("×"))
-        self.botonDivision.clicked.connect(lambda:self.setDisplayText("÷"))
+        self.botonMulti.clicked.connect(lambda:self.setDisplayText("*"))
+        self.botonDivision.clicked.connect(lambda:self.setDisplayText("/"))
         self.boton1.clicked.connect(lambda:self.setDisplayText("1"))
         self.boton2.clicked.connect(lambda:self.setDisplayText("2"))
         self.boton3.clicked.connect(lambda:self.setDisplayText("3"))
@@ -27,13 +27,19 @@ class MiVentana(QMainWindow):
         self.botonX.clicked.connect(self.borrarDigito)
         self.derecha.clicked.connect(self.moverseDerecha)
         self.izquierda.clicked.connect(self.moverseIzquierda)
+        self.botonResu.clicked.connect(self.resultado)
         # self.botonResu.clicked.connect()
         self.expresiones = ''
+        self.posicion = 0
 
+    def resultado(self):
+        igual = eval(self.expresiones)
+        self.display.setText(str(igual))
+        self.expresiones = ''
 
     def moverseDerecha(self):
         self.display.setSelection(self.display.cursorPosition(), 1)
-    
+
     def moverseIzquierda(self):
         self.display.setSelection(self.display.cursorPosition(), -1)
 
@@ -46,7 +52,6 @@ class MiVentana(QMainWindow):
 
     def borrarDigito(self):
         self.display.backspace()
-        self.display.setFocus()
         self.expresiones = self.display.text()
         self.display.setText(self.expresiones)
 
