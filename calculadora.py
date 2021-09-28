@@ -15,7 +15,6 @@ class MiVentana(QMainWindow):
         self.botonMenos.clicked.connect(lambda:self.setDisplayText("-"))
         self.botonMulti.clicked.connect(lambda:self.setDisplayText("×"))
         self.botonDivision.clicked.connect(lambda:self.setDisplayText("÷"))
-        self.boton1.clicked.connect(lambda:self.setDisplayText("-"))
         self.boton1.clicked.connect(lambda:self.setDisplayText("1"))
         self.boton2.clicked.connect(lambda:self.setDisplayText("2"))
         self.boton3.clicked.connect(lambda:self.setDisplayText("3"))
@@ -25,17 +24,21 @@ class MiVentana(QMainWindow):
         self.boton7.clicked.connect(lambda:self.setDisplayText("7"))
         self.boton8.clicked.connect(lambda:self.setDisplayText("8"))
         self.boton9.clicked.connect(lambda:self.setDisplayText("9"))
+        # self.botonResu.clicked.connect()
+        self.expresiones = ''
+
+
 
     def limpiarDisplay(self):
         self.display.setText('')
-        self.display.setFocus()
+        self.expresiones = ''
 
     def setDisplayText(self, text):
         self.display.setText(text)
-        self.display.setFocus()
+        self.expresiones = self.expresiones + self.display.text()
+        self.display.setText(self.expresiones)
 
-    def agregar_digito(self):
-        self.Calculo.setText(self.Calculo.text() + self.backup.text())
+
 
 
 

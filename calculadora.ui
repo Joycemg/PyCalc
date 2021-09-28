@@ -32,12 +32,18 @@
       <x>30</x>
       <y>40</y>
       <width>511</width>
-      <height>254</height>
+      <height>290</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="6" column="2">
       <widget class="QPushButton" name="boton6">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -55,6 +61,17 @@
      </item>
      <item row="2" column="4">
       <widget class="QPushButton" name="botonX">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>🡸 </string>
        </property>
@@ -62,6 +79,18 @@
      </item>
      <item row="9" column="0">
       <widget class="QPushButton" name="boton0">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -79,6 +108,12 @@
      </item>
      <item row="2" column="1">
       <widget class="QPushButton" name="boton8">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -96,6 +131,12 @@
      </item>
      <item row="2" column="0">
       <widget class="QPushButton" name="boton7">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -113,6 +154,12 @@
      </item>
      <item row="2" column="2">
       <widget class="QPushButton" name="boton9">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -130,6 +177,18 @@
      </item>
      <item row="6" column="1">
       <widget class="QPushButton" name="boton5">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -147,9 +206,16 @@
      </item>
      <item row="8" column="3">
       <widget class="QPushButton" name="botonMenos">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
+         <pointsize>15</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -164,6 +230,12 @@
      </item>
      <item row="8" column="1">
       <widget class="QPushButton" name="boton2">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -181,9 +253,16 @@
      </item>
      <item row="6" column="3">
       <widget class="QPushButton" name="botonMulti">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
+         <pointsize>15</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -198,6 +277,12 @@
      </item>
      <item row="6" column="0">
       <widget class="QPushButton" name="boton4">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -215,9 +300,16 @@
      </item>
      <item row="9" column="4">
       <widget class="QPushButton" name="botonResu">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
+         <pointsize>15</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -232,9 +324,16 @@
      </item>
      <item row="2" column="3">
       <widget class="QPushButton" name="botonDivision">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
+         <pointsize>15</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -249,6 +348,12 @@
      </item>
      <item row="9" column="1">
       <widget class="QPushButton" name="boton00">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -266,9 +371,16 @@
      </item>
      <item row="6" column="4">
       <widget class="QPushButton" name="botonC">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
+         <pointsize>15</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -283,6 +395,12 @@
      </item>
      <item row="8" column="0">
       <widget class="QPushButton" name="boton1">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -300,9 +418,16 @@
      </item>
      <item row="9" column="3">
       <widget class="QPushButton" name="botonSuma">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
+         <pointsize>15</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -317,9 +442,16 @@
      </item>
      <item row="9" column="2">
       <widget class="QPushButton" name="botonPunto">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -334,6 +466,12 @@
      </item>
      <item row="8" column="2">
       <widget class="QPushButton" name="boton3">
+       <property name="maximumSize">
+        <size>
+         <width>97</width>
+         <height>46</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Noto Sans</family>
@@ -368,6 +506,9 @@
        </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="readOnly">
         <bool>true</bool>
