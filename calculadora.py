@@ -13,7 +13,7 @@ class MiVentana(QMainWindow):
         self.botonMas.clicked.connect(self.sumar)
         self.botonMenos.clicked.connect(self.restar)
         self.botonMulti.clicked.connect(self.multiplicacion)
-        self.botonDivi.clicked.connect(lambda:self.setDisplayText("/"))
+        self.botonDivi.clicked.connect(self.division)
         self.botonPorcen.clicked.connect(lambda:self.setDisplayText("%"))
         self.botonPoten.clicked.connect(lambda:self.setDisplayText("**"))
         self.botonPIzquierdo.clicked.connect(lambda:self.setDisplayText("("))
@@ -34,74 +34,30 @@ class MiVentana(QMainWindow):
         # self.botonResu.clicked.connect()
         self.historial.clicked.connect(self.on_click)
         self.expresiones = ''
-        self.numA = ''
-        # if '+' in self.expresiones:
-        #     for dig in self.expresiones:
-        #         if dig == "+":
-        #             break
-        #         self.numA += dig
-        #         print(self.numA)
-
+    
     def sumar(self):
-
-        if "+" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
-        if '-' in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)    
-        if "*" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))            
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
+        # if "+" or "-" or "*" or "/" in self.expresiones:
+        #     self.resultado()
 
         self.setDisplayText("+")
 
     def restar(self):
-        if "-" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
-
-        if "+" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
-        if "*" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))            
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
+        # if "+" or "-" or "*" or "/" in self.expresiones:
+        #     self.resultado()
 
         self.setDisplayText("-")
     
     def multiplicacion(self):
-        if "-" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))            
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
-
-        if "+" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))            
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
-
-        if "*" in self.expresiones:
-            igual = eval(self.expresiones)
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))            
-            self.expresiones = str(igual)
-            self.display.setText(self.expresiones)
+        # if "+" or "-" or "*" or "/" in self.expresiones:
+        #     self.resultado()
 
         self.setDisplayText("*")
+
+    def division(self):
+        # if "+" or "-" or "*" or "/" in self.expresiones:
+        #     self.resultado()
+
+        self.setDisplayText("/")
 
 
 
@@ -131,10 +87,10 @@ class MiVentana(QMainWindow):
             igual = eval(self.expresiones)
             self.display.setText(str(igual))
             self.historial.addItem(self.expresiones + ' = ' + str(igual))
-            # self.expresiones = ''
+            self.expresiones = str(round(igual, 2))
         except:
             self.display.setText("ERROR")
-            # self.expresiones = ''
+            self.expresiones = ''
 
 
     def moverseDerecha(self):
