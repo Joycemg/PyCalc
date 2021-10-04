@@ -56,9 +56,10 @@ class MiVentana(QMainWindow):
     def division(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
-
-        self.setDisplayText("/")
-
+        if self.expresiones == '' or self.expresiones == '0':
+            self.display.setText("No se puede dividir")
+        else:
+            self.setDisplayText("/")
 
 
     def puntos(self):
