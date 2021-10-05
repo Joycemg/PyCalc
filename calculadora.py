@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
 from PyQt5 import uic
 import re
-import math
+import time
 
 
 class MiVentana(QMainWindow):
@@ -33,12 +33,7 @@ class MiVentana(QMainWindow):
         self.botonX.clicked.connect(self.borrarDigito)
         self.botonResultado.clicked.connect(self.resultado)
         self.historial.clicked.connect(self.on_click)
-        self.expresiones = ''
     
-
-
-    def expres(expression):
-        return eval(re.sub(r'√(\d+)', r'math.sqrt(\1)', expression))
         
     def sumar(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
@@ -61,14 +56,14 @@ class MiVentana(QMainWindow):
     def division(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
-        if self.expresiones == '' or self.expresiones == '0':
-            self.display.setText("No se puede dividir")
+        if self.display.text() == '' or self.display.text() == '0':
+            self.display.setText("")
         else:
             self.setDisplayText("÷")
 
 
     def puntos(self):
-        if self.expresiones == '' or self.expresiones == '0':
+        if self.display.text() == '':
             self.setDisplayText("0,")
         else:
             self.setDisplayText(",")
@@ -90,17 +85,18 @@ class MiVentana(QMainWindow):
 
     def resultado(self):
         try:
-            aux = self.expresiones
+            aux = self.display.text()
             aux = re.sub(r'÷', r'/', aux)
+            aux = re.sub(r',', r'.', aux)
             aux = re.sub(r'×', r'*', aux)
             aux = re.sub(r'²', r'**2', aux)
             igual = eval(aux)
-            self.display.setText(str(igual))
-            self.historial.addItem(self.expresiones + ' = ' + str(igual))
-            self.expresiones = str(round(igual, 2))
+            igualStr = str(igual).replace('.', ',')
+            self.historial.addItem(self.display.text() + ' = ' + igualStr)
+            self.display.setText(str(round(igual, 3)).replace('.', ','))
         except:
             self.display.setText("ERROR")
-            self.expresiones = ''
+
 
 
 
@@ -114,12 +110,29 @@ class MiVentana(QMainWindow):
         self.expresiones = self.display.text()
         # self.display.setText(self.expresiones)
 
-    def setDisplayText(self, text):
-        self.display.setText(text)
+    def setDisplayText(self, tex):
+        if self.display.text() == "ERROR":
+            time.sleep(0.2)
+            self.display.setText("")
+        digito=tex
+        self.display.setText(self.display.text()+ digito)
         self.display.setFocus()
-        self.expresiones = self.expresiones + self.display.text()
+
         
-        self.display.setText(self.expresiones)
+        # self.display.setText(digito+text) 
+        # self.display.setFocus()
+        # self.expresiones = self.display.text()
+#         self.expresiones = self.expresiones + self.display.text()
+
+# 
+        # if '+' == digito:
+        #     # self.display.setText(self.display.text() + digito) 
+        #     self.display.setFocus()
+        # else:
+        #     display = self.display.text()
+        #     retonar = '{:,}'.format(int(display))
+        #     # .replace(',','.')
+        #     self.display.setText(str(retonar))
 
 
 
