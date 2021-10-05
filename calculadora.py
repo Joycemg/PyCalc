@@ -4,6 +4,7 @@ import re
 import time
 
 
+
 class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -93,7 +94,16 @@ class MiVentana(QMainWindow):
             igual = eval(aux)
             igualStr = str(igual).replace('.', ',')
             self.historial.addItem(self.display.text() + ' = ' + igualStr)
-            self.display.setText(str(round(igual, 3)).replace('.', ','))
+            # if "," in igualStr:
+            #     self.display.setText(f'{igual:.2f}'.replace(".", ","))
+            # else:
+            if type(igual) == float:
+                self.display.setText(f'{igual:.3f}'.replace(".", ","))
+            else:
+                self.display.setText(str(igual))
+
+
+
         except:
             self.display.setText("ERROR")
 
@@ -118,7 +128,10 @@ class MiVentana(QMainWindow):
         self.display.setText(self.display.text()+ digito)
         self.display.setFocus()
 
-        
+        # display = self.display.text()
+        # retornar = f'{display:10}'
+        # self.display.setText(retornar)
+
         # self.display.setText(digito+text) 
         # self.display.setFocus()
         # self.expresiones = self.display.text()
