@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
 from PyQt5 import uic
+import re
+import math
 
 
 class MiVentana(QMainWindow):
@@ -13,9 +15,10 @@ class MiVentana(QMainWindow):
         self.botonMas.clicked.connect(self.sumar)
         self.botonMenos.clicked.connect(self.restar)
         self.botonMulti.clicked.connect(self.multiplicacion)
+        self.botonRaiz.clicked.connect(lambda:self.setDisplayText("√"))
         self.botonDivi.clicked.connect(self.division)
         self.botonPorcen.clicked.connect(lambda:self.setDisplayText("%"))
-        self.botonPoten.clicked.connect(lambda:self.setDisplayText("**"))
+        self.botonPoten.clicked.connect(lambda:self.setDisplayText("²"))
         self.botonPIzquierdo.clicked.connect(lambda:self.setDisplayText("("))
         self.botonPDerecho.clicked.connect(lambda:self.setDisplayText(")"))
         self.boton_1.clicked.connect(lambda:self.setDisplayText("1"))
@@ -28,13 +31,15 @@ class MiVentana(QMainWindow):
         self.boton_8.clicked.connect(lambda:self.setDisplayText("8"))
         self.boton_9.clicked.connect(lambda:self.setDisplayText("9"))
         self.botonX.clicked.connect(self.borrarDigito)
-        # self.derecha.clicked.connect(self.moverseDerecha)
-        # self.izquierda.clicked.connect(self.moverseIzquierda)
         self.botonResultado.clicked.connect(self.resultado)
-        # self.botonResu.clicked.connect()
         self.historial.clicked.connect(self.on_click)
         self.expresiones = ''
     
+
+
+    def expres(expression):
+        return eval(re.sub(r'√(\d+)', r'math.sqrt(\1)', expression))
+        
     def sumar(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
@@ -51,7 +56,7 @@ class MiVentana(QMainWindow):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
 
-        self.setDisplayText("*")
+        self.setDisplayText("×")
 
     def division(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
@@ -59,14 +64,14 @@ class MiVentana(QMainWindow):
         if self.expresiones == '' or self.expresiones == '0':
             self.display.setText("No se puede dividir")
         else:
-            self.setDisplayText("/")
+            self.setDisplayText("÷")
 
 
     def puntos(self):
         if self.expresiones == '' or self.expresiones == '0':
-            self.setDisplayText("0.")
+            self.setDisplayText("0,")
         else:
-            self.setDisplayText(".")
+            self.setDisplayText(",")
 
 
 
@@ -85,7 +90,11 @@ class MiVentana(QMainWindow):
 
     def resultado(self):
         try:
-            igual = eval(self.expresiones)
+            aux = self.expresiones
+            aux = re.sub(r'÷', r'/', aux)
+            aux = re.sub(r'×', r'*', aux)
+            aux = re.sub(r'²', r'**2', aux)
+            igual = eval(aux)
             self.display.setText(str(igual))
             self.historial.addItem(self.expresiones + ' = ' + str(igual))
             self.expresiones = str(round(igual, 2))
@@ -94,14 +103,6 @@ class MiVentana(QMainWindow):
             self.expresiones = ''
 
 
-    def moverseDerecha(self):
-        self.display.setSelection(self.display.cursorPosition(), 1)
-
-    def moverseIzquierda(self):
-        self.display.setSelection(self.display.cursorPosition(), -1)
-
-
-        
 
     def limpiarDisplay(self):
         self.display.clear()
@@ -117,8 +118,9 @@ class MiVentana(QMainWindow):
         self.display.setText(text)
         self.display.setFocus()
         self.expresiones = self.expresiones + self.display.text()
-
+        
         self.display.setText(self.expresiones)
+
 
 
 
