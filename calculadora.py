@@ -87,13 +87,11 @@ class MiVentana(QMainWindow):
     def resultado(self):
         try:
             aux = self.display.text()
-            aux = re.sub(r'÷', r'/', aux)
-            aux = re.sub(r',', r'.', aux)
-            aux = re.sub(r'×', r'*', aux)
-            aux = re.sub(r'²', r'**2', aux)
+            aux = self.replacements(aux)
             igual = eval(aux)
             igualStr = str(igual).replace('.', ',')
-            self.historial.addItem(self.display.text() + ' = ' + igualStr)
+            if not igualStr == self.display.text():
+                self.historial.addItem(f'{self.display.text()} {"=": ^20} {igualStr}')
             # if "," in igualStr:
             #     self.display.setText(f'{igual:.2f}'.replace(".", ","))
             # else:
@@ -127,7 +125,24 @@ class MiVentana(QMainWindow):
         digito=tex
         self.display.setText(self.display.text()+ digito)
         self.display.setFocus()
+        aux = self.display.text()
+        aux = self.replacements(aux)
+        try:
+            if eval(aux):
+                igual = eval(aux)
+                igualStr = str(igual).replace('.', ',')
+                self.label.setText(igualStr)
+        except:
+            pass
 
+    def replacements(self, var):
+        operadores =(
+            ('÷', '/'),('×', '*'), 
+            ('²', '**2'),(',', '.'))
+        
+        for op in operadores:
+            var = re.sub(op[0], op[1], var)
+        return var
         # display = self.display.text()
         # retornar = f'{display:10}'
         # self.display.setText(retornar)
@@ -148,7 +163,7 @@ class MiVentana(QMainWindow):
         #     self.display.setText(str(retonar))
 
 
-
+print()
 
 
 
