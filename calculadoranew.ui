@@ -90,6 +90,9 @@
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectItems</enum>
       </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideRight</enum>
+      </property>
       <property name="horizontalScrollMode">
        <enum>QAbstractItemView::ScrollPerItem</enum>
       </property>

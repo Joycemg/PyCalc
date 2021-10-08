@@ -1,16 +1,14 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
 from PyQt5 import uic
-from PyQt5.QtGui import QColor, QFont, QTextOption
+from PyQt5.QtGui import QFont
 import re
 import time
-from pprint import pprint;
 
 
 class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("programacion_II/clase4/calculadoranew.ui", self)
-            # self.backup.textChanged.connect(self.agregar_digito)
         self.botonC.clicked.connect(self.limpiarDisplay)
         self.boton_.clicked.connect(lambda:self.setDisplayText("0"))
         self.boton_Punto.clicked.connect(self.puntos)
@@ -98,7 +96,7 @@ class MiVentana(QMainWindow):
                 self.search(self.display.text())
 
             if type(igual) == float:
-                self.display.setText(f'{igual:.3f}'.replace(".", ","))
+                self.display.setText(f'{igual:.2f}'.replace(".", ","))
             else:
                 self.display.setText(str(igual))
 
@@ -106,9 +104,7 @@ class MiVentana(QMainWindow):
 
         except:
             self.display.setText("ERROR")
-        # items = self.historial.findItems('2', QtCore.Qt.MatchContains)
-        # items1 = self.historial.count()
-        # print(items.index)
+
     def limpiarDisplay(self):
         self.display.clear()
 
@@ -116,7 +112,6 @@ class MiVentana(QMainWindow):
         self.display.backspace()
         self.display.setFocus()
         self.expresiones = self.display.text()
-        # self.display.setText(self.expresiones)
 
     def setDisplayText(self, tex):
         if self.display.text() == "ERROR":
