@@ -1,8 +1,9 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
 from PyQt5 import uic
+from PyQt5.QtGui import QColor, QFont, QTextOption
 import re
 import time
-
+from pprint import pprint;
 
 
 class MiVentana(QMainWindow):
@@ -34,8 +35,6 @@ class MiVentana(QMainWindow):
         self.botonX.clicked.connect(self.borrarDigito)
         self.botonResultado.clicked.connect(self.resultado)
         self.historial.clicked.connect(self.on_click)
-    
-        
     def sumar(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
@@ -75,14 +74,17 @@ class MiVentana(QMainWindow):
 
     def on_click(self):
         print(self.historial.currentItem().text())
-        HistoryOP = self.historial.currentItem().text()
+        HistoryOP = self.historial.currentItem().text().strip()
         expresion = ''
         for dig in HistoryOP:
-            if dig == " ":
-                break
             expresion += dig
-        self.expresiones = expresion
         self.display.setText(expresion)
+
+
+    def search(self, igualx):
+        for i  in range(0, self.historial.count()):
+            if self.historial.item(i).text() == igualx:
+                self.historial.item(i).setFont (QFont ("Courier", 9, italic = True))
 
     def resultado(self):
         try:
@@ -91,10 +93,10 @@ class MiVentana(QMainWindow):
             igual = eval(aux)
             igualStr = str(igual).replace('.', ',')
             if not igualStr == self.display.text():
-                self.historial.addItem(f'{self.display.text()} {"=": ^20} {igualStr}')
-            # if "," in igualStr:
-            #     self.display.setText(f'{igual:.2f}'.replace(".", ","))
-            # else:
+                self.historial.addItem(f'{self.display.text():<0}')
+                self.historial.addItem(f' {igualStr}')
+                self.search(self.display.text())
+
             if type(igual) == float:
                 self.display.setText(f'{igual:.3f}'.replace(".", ","))
             else:
@@ -104,13 +106,11 @@ class MiVentana(QMainWindow):
 
         except:
             self.display.setText("ERROR")
-
-
-
-
+        # items = self.historial.findItems('2', QtCore.Qt.MatchContains)
+        # items1 = self.historial.count()
+        # print(items.index)
     def limpiarDisplay(self):
         self.display.clear()
-        self.expresiones = ''
 
     def borrarDigito(self):
         self.display.backspace()
@@ -163,7 +163,6 @@ class MiVentana(QMainWindow):
         #     self.display.setText(str(retonar))
 
 
-print()
 
 
 

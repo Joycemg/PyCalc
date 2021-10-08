@@ -29,6 +29,12 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QListWidget" name="historial">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <family>Hack</family>
@@ -42,14 +48,20 @@
       <property name="cursor" stdset="0">
        <cursorShape>OpenHandCursor</cursorShape>
       </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::DefaultContextMenu</enum>
       </property>
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: white</string>
+       <string notr="true">color: white;background: transparent;</string>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
@@ -58,7 +70,7 @@
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
       <property name="autoScroll">
        <bool>true</bool>
@@ -66,17 +78,20 @@
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
       <property name="alternatingRowColors">
        <bool>false</bool>
       </property>
       <property name="selectionMode">
        <enum>QAbstractItemView::NoSelection</enum>
       </property>
-      <property name="textElideMode">
-       <enum>Qt::ElideRight</enum>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
       </property>
       <property name="horizontalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
+       <enum>QAbstractItemView::ScrollPerItem</enum>
       </property>
       <property name="isWrapping" stdset="0">
        <bool>false</bool>
@@ -85,7 +100,7 @@
        <enum>QListView::Fixed</enum>
       </property>
       <property name="layoutMode">
-       <enum>QListView::SinglePass</enum>
+       <enum>QListView::Batched</enum>
       </property>
       <property name="spacing">
        <number>5</number>
@@ -97,13 +112,19 @@
        <number>0</number>
       </property>
       <property name="uniformItemSizes">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
       </property>
+      <property name="selectionRectVisible">
+       <bool>false</bool>
+      </property>
       <property name="itemAlignment">
-       <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+       <set>Qt::AlignLeading</set>
+      </property>
+      <property name="setUniformItemSizes" stdset="0">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
