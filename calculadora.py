@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
-from PyQt5 import uic
+from PyQt5 import uic, QtGui
 from PyQt5.QtGui import QFont
 import re
 import time
@@ -18,7 +18,7 @@ class MiVentana(QMainWindow):
         self.botonRaiz.clicked.connect(lambda:self.setDisplayText("√"))
         self.botonDivi.clicked.connect(self.division)
         self.botonPorcen.clicked.connect(lambda:self.setDisplayText("%"))
-        self.botonPoten.clicked.connect(lambda:self.setDisplayText("²"))
+        self.botonPoten.clicked.connect(self.potencia)
         self.botonPIzquierdo.clicked.connect(lambda:self.setDisplayText("("))
         self.botonPDerecho.clicked.connect(lambda:self.setDisplayText(")"))
         self.boton_1.clicked.connect(lambda:self.setDisplayText("1"))
@@ -33,6 +33,20 @@ class MiVentana(QMainWindow):
         self.botonX.clicked.connect(self.borrarDigito)
         self.botonResultado.clicked.connect(self.resultado)
         self.historial.clicked.connect(self.on_click)
+        self.potencia = False
+        self.dicPotencia = {chr(0x2070) : '0', chr(0xB9): '1',chr(0x0B2) : '2', chr(0x0b3) : '3', chr(0x2074) : '4',
+         chr(0x2075): '5',chr(0x2076) : '6', chr(0x2077) : '7', chr(0x2078) : '8',chr(0x2079) : '9' }
+    
+    def potencia(self):
+        self.potencia = True
+
+    def remplazarNum(self, var):
+        for i in self.dicPotencia:
+            if self.dicPotencia[i] == var:
+                var = re.sub(self.dicPotencia[i], i, var)
+                break
+        return var
+        
     def sumar(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
@@ -98,7 +112,7 @@ class MiVentana(QMainWindow):
             if type(igual) == float:
                 self.display.setText(f'{igual:.2f}'.replace(".", ","))
             else:
-                self.display.setText(str(igual))
+                self.display.setText(str(igual)).self.Superindice()
 
 
 
@@ -115,13 +129,18 @@ class MiVentana(QMainWindow):
 
     def setDisplayText(self, tex):
         if self.display.text() == "ERROR":
-            time.sleep(0.2)
+            time.sleep(0.1)
             self.display.setText("")
         digito=tex
+        if self.potencia:
+            digito = self.remplazarNum(digito)
+            self.potencia = False
+
         self.display.setText(self.display.text()+ digito)
         self.display.setFocus()
         aux = self.display.text()
         aux = self.replacements(aux)
+
         try:
             if eval(aux):
                 igual = eval(aux)
@@ -129,11 +148,10 @@ class MiVentana(QMainWindow):
                 self.label.setText(igualStr)
         except:
             pass
-
     def replacements(self, var):
         operadores =(
             ('÷', '/'),('×', '*'), 
-            ('²', '**2'),(',', '.'))
+            ('²', '**2'),(',', '.'),('%', '/100'))
         
         for op in operadores:
             var = re.sub(op[0], op[1], var)
@@ -156,9 +174,6 @@ class MiVentana(QMainWindow):
         #     retonar = '{:,}'.format(int(display))
         #     # .replace(',','.')
         #     self.display.setText(str(retonar))
-
-
-
 
 
 app = QApplication([])
