@@ -34,16 +34,16 @@ class MiVentana(QMainWindow):
         self.botonResultado.clicked.connect(self.resultado)
         self.historial.clicked.connect(self.on_click)
         self.potencia = False
-        self.dicPotencia = {chr(0x2070) : '0', chr(0xB9): '1',chr(0x0B2) : '2', chr(0x0b3) : '3', chr(0x2074) : '4',
-         chr(0x2075): '5',chr(0x2076) : '6', chr(0x2077) : '7', chr(0x2078) : '8',chr(0x2079) : '9' }
-    
+
+        self.dicPotencia = {'0' : chr(0x2070), '1' : chr(0xB9), '2' : chr(0x0B2),'3' : chr(0x0b3), '4' : chr(0x2074), '5':chr(0x2075),'6':chr(0x2076), '7' : chr(0x2077), '8':chr(0x2078), '9':chr(0x2079)}
+        self.dicPotencia2 = {}
     def potencia(self):
         self.potencia = True
 
     def remplazarNum(self, var):
         for i in self.dicPotencia:
-            if self.dicPotencia[i] == var:
-                var = re.sub(self.dicPotencia[i], i, var)
+            if i == var:
+                var = re.sub( i,self.dicPotencia[i], var)
                 break
         return var
         
@@ -112,7 +112,7 @@ class MiVentana(QMainWindow):
             if type(igual) == float:
                 self.display.setText(f'{igual:.2f}'.replace(".", ","))
             else:
-                self.display.setText(str(igual)).self.Superindice()
+                self.display.setText(str(igual))
 
 
 
@@ -132,11 +132,19 @@ class MiVentana(QMainWindow):
             time.sleep(0.1)
             self.display.setText("")
         digito=tex
+        
         if self.potencia:
-            digito = self.remplazarNum(digito)
+            digito2 = self.remplazarNum(digito)
+            self.display.setText(self.display.text()+ digito2)
+            # self.dicPotencia2 = dict.fromkeys(digito, digito2)
             self.potencia = False
+        else:
+            self.display.setText(self.display.text()+ digito)
 
-        self.display.setText(self.display.text()+ digito)
+        print(self.dicPotencia2 )
+        # if self.potencia:
+        #     self.dicPotencia2 = dict.fromkeys(secuencia, 0.1)
+        #     pass
         self.display.setFocus()
         aux = self.display.text()
         aux = self.replacements(aux)
@@ -148,14 +156,23 @@ class MiVentana(QMainWindow):
                 self.label.setText(igualStr)
         except:
             pass
+        
     def replacements(self, var):
         operadores =(
             ('÷', '/'),('×', '*'), 
-            ('²', '**2'),(',', '.'),('%', '/100'))
+            (',', '.'),('%', '/100'))
         
         for op in operadores:
             var = re.sub(op[0], op[1], var)
-        return var
+        
+
+        for i in self.dicPotencia:
+            if self.dicPotencia[i] in var:
+                var = re.sub(self.dicPotencia[i], f'**{i}', var)
+                print(var)
+        return var    
+
+
         # display = self.display.text()
         # retornar = f'{display:10}'
         # self.display.setText(retornar)
