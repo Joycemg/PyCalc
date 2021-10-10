@@ -105,25 +105,6 @@ class MiVentana(QMainWindow):
                 self.historial.item(i).setFont (QFont ("Courier", 9, italic = True))
 
 
-    def preResultado(self):
-        try:
-            aux = self.display.text()
-            aux = self.replacements(aux)
-            if self.raizC:
-                igual = f'{aux} **(0.5)'
-            else:
-                igual = self.replacements(aux)
-
-            igual = eval(igual)
-            igualStr = str(igual).replace('.', ',')
-
-            if type(igual) == float:
-                self.label.setText(f'{igual:.2f}'.replace(".", ","))
-            else:
-                self.label.setText(str(igual))
-        except:
-            self.display.setText("....")
-
     def resultado(self):
         try:
             aux = self.display.text()
@@ -142,10 +123,7 @@ class MiVentana(QMainWindow):
                 self.historial.addItem(f' {igualStr}')
                 self.search(self.display.text())
 
-            if type(igual) == float:
-                self.display.setText(f'{igual:.2f}'.replace(".", ","))
-            else:
-                self.display.setText(str(igual))
+            self.display.setText(str(igual).replace(".", ","))
 
 
 
@@ -179,21 +157,26 @@ class MiVentana(QMainWindow):
         else:
             self.display.setText(self.display.text()+ digito)
 
-        print(self.dicPotencia2 )
+        self.display.setFocus()
+        aux = self.display.text()
+        try:
+            self.label.setText(aux)
+            aux = self.replacements(aux)
+            if eval(aux):
+                if self.raizC:
+                    igual = f'{aux} **(0.5)'
+                else:
+                    igual = self.replacements(aux)
+
+                igual = eval(igual)
+                self.label.setText(str(igual).replace(".", ","))
+
+        except:
+            self.label.setText(".....")
         # if self.potencia:
         #     self.dicPotencia2 = dict.fromkeys(secuencia, 0.1)
         #     pass
-        self.display.setFocus()
-        aux = self.display.text()
-        aux = self.replacements(aux)
-        try:
-            if eval(aux):
-                self.preResultado()
-                # igual = eval(aux)
-                # igualStr = str(igual).replace('.', ',')
-                # self.label.setText(igualStr)
-        except:
-            pass
+        
         
     def replacements(self, var):
         operadores =(
