@@ -49,7 +49,8 @@ class MiVentana(QMainWindow):
 
     def potencia(self):
         self.raizC = False
-        self.poten = True
+        if self.display.text():
+            self.poten = True
 
     def remplazarNum(self, var):
         for i in self.dicPotencia:
@@ -154,6 +155,9 @@ class MiVentana(QMainWindow):
         self.dicPotencia2.clear()
 
     def borrarDigito(self):
+        if self.poten:
+            self.digitoP2 = self.digitoP2[:-1]
+            self.digitoP = self.digitoP[:-1]
         if self.display.text():
             self.display.backspace()
         else:
@@ -170,6 +174,7 @@ class MiVentana(QMainWindow):
             self.digitoP = self.digitoP + digito2
             self.display.setText(self.display.text()+ digito2)
             self.dicPotencia2[self.digitoP2] = self.digitoP
+            print(self.dicPotencia2)
         
 
         elif self.raizC:
