@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFont
 import re
 import time
 
-
+#### BUG EN POTENCIA AL USAR BACK AL DIGITO DE LA CALCULADORA
 class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -35,7 +35,7 @@ class MiVentana(QMainWindow):
         self.historial.clicked.connect(self.on_click)
         self.digitoP = ''
         self.digitoP2 = ''
-        self.potencia = False
+        self.poten = False
         self.raizC = False
 # √
         self.dicPotencia = {'0' : chr(0x2070), '1' : chr(0xB9), '2' : chr(0x0B2),'3' : chr(0x0b3), '4' : chr(0x2074), '5':chr(0x2075),'6':chr(0x2076), '7' : chr(0x2077), '8':chr(0x2078), '9':chr(0x2079)}
@@ -43,41 +43,49 @@ class MiVentana(QMainWindow):
         self.dicPotencia2 = {}
     
     def raizCuadrada(self):
+        self.poten = False
         self.raizC= True
         self.setDisplayText('√')
 
     def potencia(self):
-        self.potencia = True
+        self.raizC = False
+        self.poten = True
 
     def remplazarNum(self, var):
         for i in self.dicPotencia:
             if i == var:
                 var = re.sub( i,self.dicPotencia[i], var)
-                break
+                # break
         return var
+
     def convertirPotencia(self, var):
         pass
     def sumar(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
-
+        self.poten = False
+        self.raizC = False
         self.setDisplayText("+")
 
     def restar(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
-
+        self.poten = False
+        self.raizC = False
         self.setDisplayText("-")
     
     def multiplicacion(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
-
+        self.poten = False
+        self.raizC = False
         self.setDisplayText("×")
 
     def division(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
+        self.poten = False
+        self.raizC = False
         if self.display.text() == '' or self.display.text() == '0':
             self.display.setText("")
         else:
@@ -110,14 +118,12 @@ class MiVentana(QMainWindow):
 
 
     def resultado(self):
+        aux = self.display.text()
+        igual = self.replacements(aux, self.digitoP)
+        if self.raizC:
+            igual = f'{igual}**(0.5)'
+            self.raizC = False
         try:
-            aux = self.display.text()
-            if self.raizC:
-                igual = f'{aux} **(0.5)'
-                self.raizC = False
-            else:
-                igual = self.replacements(aux, self.digitoP)
-
             igual = eval(igual)
             igualStr = str(igual).replace('.', ',')
             if not igualStr == self.display.text():
@@ -129,8 +135,10 @@ class MiVentana(QMainWindow):
                 self.display.setText(f'{igual:.2f}'.replace(".", ","))
             else:
                 self.display.setText(str(igual))
+
             self.digitoP = ''
             self.digitoP2 = ''
+            self.poten = False
             self.dicPotencia2.clear()
 
 
@@ -138,31 +146,30 @@ class MiVentana(QMainWindow):
             self.display.setText("ERROR")
 
     def limpiarDisplay(self):
+        self.poten = False
+        self.raizC = False
         self.display.clear()
         self.digitoP = ''
         self.digitoP2 = ''
         self.dicPotencia2.clear()
 
     def borrarDigito(self):
-        self.display.backspace()
-        self.digitoP = ''
-        self.digitoP2 = ''
-        self.dicPotencia2.clear()
-        self.display.setFocus()
-
+        if self.display.text():
+            self.display.backspace()
+        else:
+            self.limpiarDisplay()
     def setDisplayText(self, tex):
         if self.display.text() == "ERROR":
             time.sleep(0.1)
             self.display.setText("")
         digito=tex
         
-        if self.potencia:
+        if self.poten:
             self.digitoP2 = self.digitoP2 + digito
             digito2 = self.remplazarNum(digito)
             self.digitoP = self.digitoP + digito2
             self.display.setText(self.display.text()+ digito2)
             self.dicPotencia2[self.digitoP2] = self.digitoP
-            self.potencia = False
         
 
         elif self.raizC:
@@ -173,15 +180,17 @@ class MiVentana(QMainWindow):
 
         self.display.setFocus()
         aux = self.display.text()
-        aux = self.replacements(aux, self.digitoP)
+        igual = self.replacements(aux, self.digitoP)
+        print(igual)
         try:
-            if eval(aux):
+            if eval(igual):
                 if self.raizC:
-                    igual = f'{aux} **(0.5)'
-                else:
-                    igual = self.replacements(aux, self.digitoP)
+                    igual = f'{igual} **(0.5)'
+                    print(igual)
 
+                print(igual)
                 igual = eval(igual)
+                print(igual)
                 self.label.setText(str(igual).replace(".", ","))
         except:
             self.label.setText(".....")
