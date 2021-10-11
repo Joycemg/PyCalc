@@ -4,7 +4,6 @@ from PyQt5.QtGui import QFont
 import re
 import time
 
-#### BUG EN POTENCIA AL USAR BACK AL DIGITO DE LA CALCULADORA
 class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -56,11 +55,8 @@ class MiVentana(QMainWindow):
         for i in self.dicPotencia:
             if i == var:
                 var = re.sub( i,self.dicPotencia[i], var)
-                # break
         return var
 
-    def convertirPotencia(self, var):
-        pass
     def sumar(self):
         # if "+" or "-" or "*" or "/" in self.expresiones:
         #     self.resultado()
@@ -162,6 +158,7 @@ class MiVentana(QMainWindow):
             self.display.backspace()
         else:
             self.limpiarDisplay()
+            
     def setDisplayText(self, tex):
         if self.display.text() == "ERROR":
             time.sleep(0.1)
@@ -186,23 +183,16 @@ class MiVentana(QMainWindow):
         self.display.setFocus()
         aux = self.display.text()
         igual = self.replacements(aux, self.digitoP)
-        print(igual)
         try:
             if eval(igual):
                 if self.raizC:
                     igual = f'{igual} **(0.5)'
-                    print(igual)
 
                 print(igual)
                 igual = eval(igual)
-                print(igual)
                 self.label.setText(str(igual).replace(".", ","))
         except:
             self.label.setText(".....")
-
-        # if self.potencia:
-        #     self.dicPotencia2 = dict.fromkeys(secuencia, 0.1)
-        #     pass
 
         
         
@@ -218,17 +208,7 @@ class MiVentana(QMainWindow):
         for i in self.dicPotencia2:
             if self.dicPotencia2[i] == var2:
                 var = re.sub(self.dicPotencia2[i], f'**{i}', var)
-        return var    
-
-
-        # display = self.display.text()
-        # retornar = f'{display:10}'
-        # self.display.setText(retornar)
-
-        # self.display.setText(digito+text) 
-        # self.display.setFocus()
-        # self.expresiones = self.display.text()
-#         self.expresiones = self.expresiones + self.display.text()
+        return var
 
 # 
         # if '+' == digito:
