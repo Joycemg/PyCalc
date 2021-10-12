@@ -1,8 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
-from PyQt5 import uic, QtGui
+from PyQt5 import uic
 from PyQt5.QtGui import QFont
 import re
-import time
 
 class MiVentana(QMainWindow):
     def __init__(self):
@@ -36,13 +35,33 @@ class MiVentana(QMainWindow):
         self.digitPNumber = ''
         self.pow = False
         self.raizC = False
+        # self.display.setMaxLength(19)
 # √
         self.dicPotencia = {'0' : chr(0x2070), '1' : chr(0xB9), '2' : chr(0x0B2),'3' : chr(0x0b3), '4' : chr(0x2074), '5':chr(0x2075),'6':chr(0x2076), '7' : chr(0x2077), '8':chr(0x2078), '9':chr(0x2079)}
         
         self.dicPotencia2 = {}
     
 
-
+    def sumar(self):
+        self.pow = False
+        self.raizC = False
+        self.set_Display_Text("+")
+    def restar(self):
+        self.pow = False
+        self.raizC = False
+        self.set_Display_Text("-")
+    def multiplicacion(self):
+        self.pow = False
+        self.raizC = False
+        self.set_Display_Text("×")
+    def division(self):
+        self.pow = False
+        self.raizC = False
+        if self.display.text() == '':
+            self.display.setText("")
+        else:
+            self.set_Display_Text("÷")
+   
     def raizCuadrada(self):
         self.pow = False
         self.raizC= True
@@ -53,95 +72,11 @@ class MiVentana(QMainWindow):
         if self.display.text():
             self.pow = True
 
-    def super_Script(self, var):
-        for i in self.dicPotencia:
-            if i == var:
-                var = re.sub( i,self.dicPotencia[i], var)
-        return var
-
-    def sumar(self):
-        # if "+" or "-" or "*" or "/" in self.expresiones:
-        #     self.resultado()
-        self.pow = False
-        self.raizC = False
-        self.set_Display_Text("+")
-
-    def restar(self):
-        # if "+" or "-" or "*" or "/" in self.expresiones:
-        #     self.resultado()
-        self.pow = False
-        self.raizC = False
-        self.set_Display_Text("-")
-    
-    def multiplicacion(self):
-        # if "+" or "-" or "*" or "/" in self.expresiones:
-        #     self.resultado()
-        self.pow = False
-        self.raizC = False
-        self.set_Display_Text("×")
-
-    def division(self):
-        # if "+" or "-" or "*" or "/" in self.expresiones:
-        #     self.resultado()
-        self.pow = False
-        self.raizC = False
-        if self.display.text() == '' or self.display.text() == '0':
-            self.display.setText("")
-        else:
-            self.set_Display_Text("÷")
-
-
     def comma(self):
         if self.display.text() == '':
             self.set_Display_Text("0,")
         else:
             self.set_Display_Text(",")
-
-
-    def on_Click(self):
-        print(self.historial.currentItem().text())
-        HistoryOP = self.historial.currentItem().text().strip()
-        expresion = ''
-        for dig in HistoryOP:
-            expresion += dig
-        self.display.setText(expresion)
-
-
-    def search(self, equalx):
-        for i  in range(0, self.historial.count()):
-            if self.historial.item(i).text() == equalx:
-                self.historial.item(i).setFont (QFont ("Courier", 9, italic = True))
-
-
-    def result(self):
-        expression = self.display.text()
-        equal = self.replacements(expression, self.digitPSindex)
-        if self.raizC:
-            equal = f'{equal}**(0.5)'
-            self.raizC = False
-
-        try:
-            equal = eval(equal)
-            equalStr = str(equal).replace('.', ',')
-            if not equalStr == expression:
-                self.historial.addItem(f'{self.display.text():<0}')
-                self.historial.addItem(f' {equalStr}')
-                self.search(self.display.text())
-
-            if type(equal) == float:
-                self.display.setText(f'{equal:.2f}'.replace(".", ","))
-            else:
-                self.display.setText(str(equal))
-
-
-
-        except:
-            self.display.setText("ERROR")
-
-        self.digitPNumber = ''
-        self.digitPSindex = ''
-        self.lower_Flag()
-        self.dicPotencia2.clear()
 
     def clear_Display(self):
         self.lower_Flag()
@@ -158,13 +93,61 @@ class MiVentana(QMainWindow):
             self.display.backspace()
         else:
             self.clear_Display()
-            
+
+
+    def super_Script(self, var):
+        for i in self.dicPotencia:
+            if i == var:
+                var = re.sub( i,self.dicPotencia[i], var)
+        return var
+
+    def result(self):
+        expression = self.display.text()
+        equal = self.replacements(expression, self.digitPSindex)
+        if self.raizC:
+            equal = f'{equal}**(0.5)'
+            self.raizC = False
+
+        try:
+            equal = eval(equal)
+            equalStr = str(equal).replace('.', ',')
+            if not equalStr == expression:
+                self.historial.addItem(f'{self.display.text():<0}')
+                self.historial.addItem(f' {equalStr}')
+                self.search(self.display.text())
+
+                
+            if type(equal) == float:
+                self.display.setText(f'{equal:.2f}'.replace(".", ","))
+            else:
+                self.display.setText(str(equal))
+
+        except:
+            self.display.setText("ERROR")
+
+        self.digitPNumber = ''
+        self.digitPSindex = ''
+        self.lower_Flag()
+        self.dicPotencia2.clear()
+    def search(self, equal):
+        for i  in range(0, self.historial.count()):
+            if self.historial.item(i).text() == equal:
+                self.historial.item(i).setFont (QFont ("Courier", 9, italic = True))
+    def on_Click(self):
+        opHistory = self.historial.currentItem().text().strip()
+        expression = ''
+        for dig in opHistory:
+            expression += dig
+        self.display.setText(expression)
+    
+    def lower_Flag(self):
+        self.pow = False
+        self.raizC = False
     def set_Display_Text(self, text):
         if self.display.text() == "ERROR":
-            time.sleep(0.1)
             self.display.setText("")
         digito=text
-        
+        # print(self.display.maxLength())
         if self.pow:
             self.digitPNumber += digito
             superScript = self.super_Script(digito)
@@ -174,8 +157,6 @@ class MiVentana(QMainWindow):
             print(self.dicPotencia2)
         else:
             self.display.setText(self.display.text() + digito)
-
-        self.display.setFocus()
 
         equal = self.replacements(self.display.text(), self.digitPSindex)
         try:
@@ -188,9 +169,7 @@ class MiVentana(QMainWindow):
                 self.label.setText(str(equal).replace(".", ","))
         except:
             self.label.setText(".....")
-
-        
-        
+    
     def replacements(self, var, var2):
         operators =(
             ('÷', '/'),('×', '*'), 
@@ -215,9 +194,6 @@ class MiVentana(QMainWindow):
         #     retonar = '{:,}'.format(int(display))
         #     # .replace(',','.')
         #     self.display.setText(str(retonar))
-    def lower_Flag(self):
-        self.pow = False
-        self.raizC = False
 
 app = QApplication([])
 win = MiVentana()
