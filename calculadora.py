@@ -35,7 +35,6 @@ class MiVentana(QMainWindow):
         self.digitPNumber = ''
         self.pow = False
         self.raizC = False
-        # self.display.setMaxLength(19)
 # √
         self.dicPotencia = {'0' : chr(0x2070), '1' : chr(0xB9), '2' : chr(0x0B2),'3' : chr(0x0b3), '4' : chr(0x2074), '5':chr(0x2075),'6':chr(0x2076), '7' : chr(0x2077), '8':chr(0x2078), '9':chr(0x2079)}
         
@@ -110,17 +109,14 @@ class MiVentana(QMainWindow):
 
         try:
             equal = eval(equal)
-            equalStr = str(equal).replace('.', ',')
-            if not equalStr == expression:
-                self.historial.addItem(f'{self.display.text():<0}')
-                self.historial.addItem(f' {equalStr}')
-                self.search(self.display.text())
+            equalStr = f'{equal:15G}'.replace('.', ',').strip()
 
-                
-            if type(equal) == float:
-                self.display.setText(f'{equal:.2f}'.replace(".", ","))
-            else:
-                self.display.setText(str(equal))
+            if not equalStr == expression:
+                self.historial.addItem(f'{expression:<1}')
+                self.historial.addItem(f' {equalStr}')
+                self.search(expression)
+
+            self.display.setText(equalStr)
 
         except:
             self.display.setText("ERROR")
@@ -129,6 +125,7 @@ class MiVentana(QMainWindow):
         self.digitPSindex = ''
         self.lower_Flag()
         self.dicPotencia2.clear()
+
     def search(self, equal):
         for i  in range(0, self.historial.count()):
             if self.historial.item(i).text() == equal:
