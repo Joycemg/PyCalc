@@ -112,7 +112,7 @@ class MiVentana(QMainWindow):
             equalStr = f'{equal:15G}'.replace('.', ',').strip()
 
             if not equalStr == expression:
-                self.historial.addItem(f'{expression:<1}')
+                self.historial.addItem(f'{expression}')
                 self.historial.addItem(f' {equalStr}')
                 self.search(expression)
 
@@ -144,10 +144,11 @@ class MiVentana(QMainWindow):
         if self.display.text() == "ERROR":
             self.display.setText("")
         digito=text
-        # print(self.display.maxLength())
+
         if self.pow:
+            digito2 = digito
             self.digitPNumber += digito
-            superScript = self.super_Script(digito)
+            superScript = self.super_Script(digito2)
             self.digitPSindex += superScript
             self.display.setText(self.display.text()+ superScript)
             self.dicPotencia2[self.digitPNumber] = self.digitPSindex
@@ -155,7 +156,9 @@ class MiVentana(QMainWindow):
         else:
             self.display.setText(self.display.text() + digito)
 
+        print(self.display.text())
         equal = self.replacements(self.display.text(), self.digitPSindex)
+        print(equal)
         try:
             if eval(equal):
                 if self.raizC:
@@ -163,7 +166,8 @@ class MiVentana(QMainWindow):
 
                 print(equal)
                 equal = eval(equal)
-                self.label.setText(str(equal).replace(".", ","))
+                print(equal)
+                self.label.setText(f'{equal:15G}'.replace('.', ','))
         except:
             self.label.setText(".....")
     
@@ -176,10 +180,9 @@ class MiVentana(QMainWindow):
         for op in operators:
             var = re.sub(op[0], op[1], var)
         
-        if self.pow:
-            for i in self.dicPotencia2:
-                if self.dicPotencia2[i] == var2:
-                    var = re.sub(self.dicPotencia2[i], f'**{i}', var)
+        for i in self.dicPotencia2:
+            if self.dicPotencia2[i] == var2:
+                var = re.sub(self.dicPotencia2[i], f'**{i}', var)
         return var
 
 # 
