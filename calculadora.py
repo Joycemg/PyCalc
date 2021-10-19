@@ -2,12 +2,13 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
 from PyQt5 import uic
 from PyQt5.QtGui import QFont
 import re
-import ast
+import ast, operator
 
 class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("programacion_II/clase4/calculadoranew.ui", self)
+        self.binOps = {ast.Add: operator.add,ast.Sub: operator.sub,ast.Mult: operator.mul,ast.Div: operator.truediv,ast.Mod: operator.mod}
         self.expression = ''
         self.A = 0
         self.B = 0
@@ -25,7 +26,7 @@ class MiVentana(QMainWindow):
         self.botonMenos.clicked.connect(self.restar)
         self.botonMulti.clicked.connect(self.multiplicacion)
         self.botonDivi.clicked.connect(self.division)
-        self.botonRaiz.clicked.connect(self.raizCuadrada)
+        # self.botonRaiz.clicked.connect(self.raizCuadrada)
         self.botonPoten.clicked.connect(self.potencia)
         self.botonResultado.clicked.connect(self.result)
         #Numeros
@@ -42,10 +43,29 @@ class MiVentana(QMainWindow):
         self.digitPSindex = ''
         self.digitPNumber = ''
         self.pow = False
-        self.raizC = False
+        # self.raizC = False
 # √
-        
         self.dicSup = {}
+
+    def arithmetic(self,v):
+        node = ast.parse(v, mode='eval')
+
+        def _eval(node):
+            if isinstance(node, ast.Expression):
+                return _eval(node.body)
+            elif isinstance(node, ast.Str):
+                return node.s
+            elif isinstance(node, ast.Num):
+
+                return node.n
+            elif isinstance(node, ast.BinOp):
+
+                return self.binOps[type(node.op)](_eval(node.left), _eval(node.right))
+            else:
+                raise Exception(f'ERROR {node}')
+
+        return _eval(node.body)
+
     def get_Sup(self, x):
         normal = "0123456789"
         sup_s = "⁰¹²³⁴⁵⁶⁷⁸⁹"
@@ -53,34 +73,35 @@ class MiVentana(QMainWindow):
         return x.translate(res)
 
     def sumar(self):
-        self.pow = False
-        self.raizC = False
+        # self.pow = False
+        # self.raizC = False
         self.set_Display_Text("+")
-            
+
     def restar(self):
-        self.pow = False
-        self.raizC = False
+        # self.pow = False
+        # self.raizC = False
         self.set_Display_Text("-")
     def multiplicacion(self):
-        self.pow = False
-        self.raizC = False
+        # self.pow = False
+        # self.raizC = False
         self.set_Display_Text("×")
     def division(self):
-        self.pow = False
-        self.raizC = False
+        # self.pow = False
+        # self.raizC = False
         if self.display.text() == '':
             self.display.setText("")
         else:
             self.set_Display_Text("÷")
-   
-    def raizCuadrada(self):
-        self.pow = False
-        self.raizC= True
-        self.set_Display_Text('√')
+
+    # def raizCuadrada(self):
+    #     self.pow = False
+    #     self.raizC= True
+    #     self.set_Display_Text('√')
 
     def potencia(self):
         self.raizC = False
         if self.display.text():
+            self.set_Display_Text(' ')
             self.pow = True
 
     def comma(self):
@@ -110,47 +131,61 @@ class MiVentana(QMainWindow):
     #         if i == var:
     #             var = re.sub( i,self.dicPotencia[i], var)
     #     return var
-    def op(self, var):
-        equal = ''
-        equal = self.expression.split(var)
-        x1 = float(equal[0])
-        x2 = float(equal[1])
-        return x1, x2
+    # def op(self, var):
+    #     equal = ''
+    #     equal = self.expression.split(var)
+    #     x1 = int(equal[0])
+    #     x2 = int(equal[1])
+    #     return x1, x2
+
+
+
+    # def terms_Op(self, var):
+    #     label = self.expression
+    #     if '+' in self.expression:
+    #         x1, x2 = self.op("+")
+    #         var.setText(str(x1+x2))
+    #     elif '-' in self.expression:
+    #         x1, x2 = self.op("-")
+    #         var.setText(str(x1-x2))
+    #     elif '×' in self.expression:
+    #         x1, x2 = self.op("×")
+    #         var.setText(str(x1*x2))
+    #     elif '÷' in self.expression:
+    #         x1, x2 = self.op("÷")
+    #         if x1 == 0 or x2 == 0:
+    #             var.setText('')
+    #         else:
+    #             var.setText(str(x1/x2))
+
+    #     elif self.pow:
+    #         x1, x2 = self.op(" ")
+    #         var.setText(str(x1**x2))
+
+    #     self.expression = self.display.text()
+    #     self.label.setText(f'{label} = {self.expression}')
 
     def result(self):
-
-        if '+' in self.expression:
-            x1, x2 = self.op("+")
-            self.display.setText(str(x1+x2))
-        elif '-' in self.expression:
-            x1, x2 = self.op("-")
-            self.display.setText(str(x1-x2))
-        elif '×' in self.expression:
-            x1, x2 = self.op("×")
-            self.display.setText(str(x1*x2))  
-        elif '÷' in self.expression:
-            x1, x2 = self.op("÷")
-            self.display.setText(str(x1/x2))
-        else:
-            self.display.setText("0")          
-        self.expression = self.display.text()
+        equals = self.display.text()
+        equals = self.replacements(equals)
+        equals = self.arithmetic(equals)
 
         # if self.raizC:
-        #     equal = f'{equal}**(0.5)'
+        #     equal = f'{equals}**(0.5)'
         #     self.raizC = False
 
-        # try:
-        #     equal = ast.literal_eval(equal)
-        #     equalStr = f'{equal:15G}'.replace('.', ',').strip()
-        #     if not equalStr == expression:
-        #         self.historial.addItem(f'{expression}')
-        #         self.historial.addItem(f' {equalStr}')
-        #         self.search(expression)
+        try:
+            equalStr = f'{equals:15G}'.replace('.', ',').strip()
+            if not equalStr == self.display.text():
+                self.historial.addItem(f'{self.display.text()}')
+                self.historial.addItem(f' {equalStr}')
+                self.search(self.display.text())
 
-        #     self.display.setText(equalStr)
+            self.display.setText(equalStr)
 
-        # except:
-        #     self.display.setText("ERROR")
+
+        except:
+            self.display.setText("ERROR")
 
         self.digitPNumber = ''
         self.digitPSindex = ''
@@ -167,31 +202,29 @@ class MiVentana(QMainWindow):
         for dig in opHistory:
             expression += dig
         self.display.setText(expression)
-    
+
     def lower_Flag(self):
-        self.pow = False
-        self.raizC = False
+        # self.pow = False
+        # self.raizC = False
+        pass
 
     def set_Display_Text(self, text):
         if self.display.text() == "ERROR":
             self.display.setText("")
         digito=text
 
-        print(self.A)
-        print(self.B)
 
-
-        self.display.setText(self.display.text() + digito)
         self.expression += digito
+        self.label.setText(self.expression)
         print(self.expression)
-        # if self.pow:
-        #     self.display.setText(self.display.text()+ self.get_Sup(digito))
-        #     self.digitPSindex += self.get_Sup(digito)
-        #     self.digitPNumber += digito
-        #     self.dicSup[self.digitPNumber] = self.digitPSindex
-        # else:
-        #     self.display.setText(self.display.text() + digito)
 
+        if self.pow:
+            self.display.setText(self.display.text()+ self.get_Sup(digito))
+            self.digitPSindex += self.get_Sup(digito)
+            self.digitPNumber += digito
+            self.dicSup[self.digitPNumber] = self.digitPSindex
+        else:
+            self.display.setText(self.display.text() + digito)
         # print(self.display.text())
         # equal = self.replacements(self.display.text())
         # try:
@@ -204,20 +237,17 @@ class MiVentana(QMainWindow):
         #         self.label.setText(f'{equal:15G}'.replace('.', ','))
         # except:
         #     self.label.setText(".....")
-    
-
-
 
 
     def replacements(self, var):
         operators =(
-            ('÷', '/'),('×', '*'), 
+            ('÷', '/'),('×', '*'),
             (',', '.'),('%', '/100'),
             ('√', ''))
-        
+
         for op in operators:
             var = re.sub(op[0], op[1], var)
-        
+
         for i in self.dicSup:
             if self.dicSup[i] == self.digitPSindex:
                 var = re.sub(self.dicSup[i], f'**{i}', var)
