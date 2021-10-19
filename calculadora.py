@@ -8,7 +8,6 @@ class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("programacion_II/clase4/calculadoranew.ui", self)
-        self.binOps = {ast.Add: operator.add,ast.Sub: operator.sub,ast.Mult: operator.mul,ast.Div: operator.truediv,ast.Mod: operator.mod}
         self.expression = ''
         self.A = 0
         self.B = 0
@@ -47,8 +46,23 @@ class MiVentana(QMainWindow):
 # √
         self.dicSup = {}
 
-    def arithmetic(self,v):
-        node = ast.parse(v, mode='eval')
+    def arithmetic(self,s):
+        
+        binOps = {
+            ast.Add: operator.add,
+            ast.Sub: operator.sub,
+            ast.Mult: operator.mul,
+            ast.Div: operator.truediv,
+            ast.Mod: operator.mod
+        }
+
+        unOps = {
+        ast.USub: operator.neg,
+        ast.UAdd: operator.pos
+
+        }
+
+        node = ast.parse(s, mode='eval')
 
         def _eval(node):
             if isinstance(node, ast.Expression):
@@ -56,13 +70,13 @@ class MiVentana(QMainWindow):
             elif isinstance(node, ast.Str):
                 return node.s
             elif isinstance(node, ast.Num):
-
                 return node.n
             elif isinstance(node, ast.BinOp):
-
-                return self.binOps[type(node.op)](_eval(node.left), _eval(node.right))
+                return binOps[type(node.op)](_eval(node.left), _eval(node.right))
+            elif isinstance(node, ast.UnaryOp):
+                return unOps[type(node.op)](_eval(node.operand))
             else:
-                raise Exception(f'ERROR {node}')
+                raise Exception('Unsupported type {}'.format(node))
 
         return _eval(node.body)
 
