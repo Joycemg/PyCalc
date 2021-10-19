@@ -8,9 +8,11 @@ class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("programacion_II/clase4/calculadoranew.ui", self)
+        self.expression = ''
         self.A = 0
         self.B = 0
         self.OP = ''
+        self.digits = ''
         self.botonC.clicked.connect(self.clear_Display)
         self.botonX.clicked.connect(self.delete_Digit)
         self.boton_Punto.clicked.connect(self.comma)
@@ -53,14 +55,7 @@ class MiVentana(QMainWindow):
     def sumar(self):
         self.pow = False
         self.raizC = False
-        self.A == 0
-        if not self.A:
-            self.A = int(self.display.text())
-            self.display.clear()
-            self.OP = "+"
-        else:
-            self.B = int(self.display.text())
-            self.display.setText(str(self.A+self.B))
+        self.set_Display_Text("+")
             
     def restar(self):
         self.pow = False
@@ -90,9 +85,9 @@ class MiVentana(QMainWindow):
 
     def comma(self):
         if self.display.text() == '':
-            self.set_Display_Text("0,")
+            self.set_Display_Text("0.")
         else:
-            self.set_Display_Text(",")
+            self.set_Display_Text(".")
 
     def clear_Display(self):
         self.lower_Flag()
@@ -110,32 +105,52 @@ class MiVentana(QMainWindow):
             self.clear_Display()
 
 
-    def super_Script(self, var):
-        for i in self.dicPotencia:
-            if i == var:
-                var = re.sub( i,self.dicPotencia[i], var)
-        return var
+    # def super_Script(self, var):
+    #     for i in self.dicPotencia:
+    #         if i == var:
+    #             var = re.sub( i,self.dicPotencia[i], var)
+    #     return var
+    def op(self, var):
+        equal = ''
+        equal = self.expression.split(var)
+        x1 = float(equal[0])
+        x2 = float(equal[1])
+        return x1, x2
 
     def result(self):
-        expression = self.display.text()
-        equal = self.replacements(expression)
-        print(equal)
-        if self.raizC:
-            equal = f'{equal}**(0.5)'
-            self.raizC = False
 
-        try:
-            equal = ast.literal_eval(equal)
-            equalStr = f'{equal:15G}'.replace('.', ',').strip()
-            if not equalStr == expression:
-                self.historial.addItem(f'{expression}')
-                self.historial.addItem(f' {equalStr}')
-                self.search(expression)
+        if '+' in self.expression:
+            x1, x2 = self.op("+")
+            self.display.setText(str(x1+x2))
+        elif '-' in self.expression:
+            x1, x2 = self.op("-")
+            self.display.setText(str(x1-x2))
+        elif '×' in self.expression:
+            x1, x2 = self.op("×")
+            self.display.setText(str(x1*x2))  
+        elif '÷' in self.expression:
+            x1, x2 = self.op("÷")
+            self.display.setText(str(x1/x2))
+        else:
+            self.display.setText("0")          
+        self.expression = self.display.text()
 
-            self.display.setText(equalStr)
+        # if self.raizC:
+        #     equal = f'{equal}**(0.5)'
+        #     self.raizC = False
 
-        except:
-            self.display.setText("ERROR")
+        # try:
+        #     equal = ast.literal_eval(equal)
+        #     equalStr = f'{equal:15G}'.replace('.', ',').strip()
+        #     if not equalStr == expression:
+        #         self.historial.addItem(f'{expression}')
+        #         self.historial.addItem(f' {equalStr}')
+        #         self.search(expression)
+
+        #     self.display.setText(equalStr)
+
+        # except:
+        #     self.display.setText("ERROR")
 
         self.digitPNumber = ''
         self.digitPSindex = ''
@@ -145,6 +160,7 @@ class MiVentana(QMainWindow):
         for i  in range(0, self.historial.count()):
             if self.historial.item(i).text() == equal:
                 self.historial.item(i).setFont (QFont ("Courier", 9, italic = True))
+
     def on_Click(self):
         opHistory = self.historial.currentItem().text().strip()
         expression = ''
@@ -160,15 +176,21 @@ class MiVentana(QMainWindow):
         if self.display.text() == "ERROR":
             self.display.setText("")
         digito=text
-        if text.isDigits():
-            self.digits = text
-        if self.pow:
-            self.display.setText(self.display.text()+ self.get_Sup(digito))
-            self.digitPSindex += self.get_Sup(digito)
-            self.digitPNumber += digito
-            self.dicSup[self.digitPNumber] = self.digitPSindex
-        else:
-            self.display.setText(self.display.text() + digito)
+
+        print(self.A)
+        print(self.B)
+
+
+        self.display.setText(self.display.text() + digito)
+        self.expression += digito
+        print(self.expression)
+        # if self.pow:
+        #     self.display.setText(self.display.text()+ self.get_Sup(digito))
+        #     self.digitPSindex += self.get_Sup(digito)
+        #     self.digitPNumber += digito
+        #     self.dicSup[self.digitPNumber] = self.digitPSindex
+        # else:
+        #     self.display.setText(self.display.text() + digito)
 
         # print(self.display.text())
         # equal = self.replacements(self.display.text())
@@ -201,15 +223,6 @@ class MiVentana(QMainWindow):
                 var = re.sub(self.dicSup[i], f'**{i}', var)
         return var
 
-# 
-        # if '+' == digito:
-        #     # self.display.setText(self.display.text() + digito) 
-        #     self.display.setFocus()
-        # else:
-        #     display = self.display.text()
-        #     retonar = '{:,}'.format(int(display))
-        #     # .replace(',','.')
-        #     self.display.setText(str(retonar))
 
 app = QApplication([])
 win = MiVentana()
