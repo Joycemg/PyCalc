@@ -8,20 +8,26 @@ class MiVentana(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("programacion_II/clase4/calculadoranew.ui", self)
+        self.A = 0
+        self.B = 0
+        self.OP = ''
         self.botonC.clicked.connect(self.clear_Display)
         self.botonX.clicked.connect(self.delete_Digit)
-        self.botonResultado.clicked.connect(self.result)
         self.boton_Punto.clicked.connect(self.comma)
+        self.botonPorcen.clicked.connect(lambda:self.set_Display_Text("%"))
+        self.botonPIzquierdo.clicked.connect(lambda:self.set_Display_Text("("))
+        self.botonPDerecho.clicked.connect(lambda:self.set_Display_Text(")"))
+        self.historial.clicked.connect(self.on_Click)
+        #Operadores
         self.botonMas.clicked.connect(self.sumar)
         self.botonMenos.clicked.connect(self.restar)
         self.botonMulti.clicked.connect(self.multiplicacion)
         self.botonDivi.clicked.connect(self.division)
         self.botonRaiz.clicked.connect(self.raizCuadrada)
         self.botonPoten.clicked.connect(self.potencia)
+        self.botonResultado.clicked.connect(self.result)
+        #Numeros
         self.boton_.clicked.connect(lambda:self.set_Display_Text("0"))
-        self.botonPorcen.clicked.connect(lambda:self.set_Display_Text("%"))
-        self.botonPIzquierdo.clicked.connect(lambda:self.set_Display_Text("("))
-        self.botonPDerecho.clicked.connect(lambda:self.set_Display_Text(")"))
         self.boton_1.clicked.connect(lambda:self.set_Display_Text("1"))
         self.boton_2.clicked.connect(lambda:self.set_Display_Text("2"))
         self.boton_3.clicked.connect(lambda:self.set_Display_Text("3"))
@@ -31,7 +37,6 @@ class MiVentana(QMainWindow):
         self.boton_7.clicked.connect(lambda:self.set_Display_Text("7"))
         self.boton_8.clicked.connect(lambda:self.set_Display_Text("8"))
         self.boton_9.clicked.connect(lambda:self.set_Display_Text("9"))
-        self.historial.clicked.connect(self.on_Click)
         self.digitPSindex = ''
         self.digitPNumber = ''
         self.pow = False
@@ -44,10 +49,19 @@ class MiVentana(QMainWindow):
         sup_s = "⁰¹²³⁴⁵⁶⁷⁸⁹"
         res = x.maketrans(''.join(normal), ''.join(sup_s))
         return x.translate(res)
+
     def sumar(self):
         self.pow = False
         self.raizC = False
-        self.set_Display_Text("+")
+        self.A == 0
+        if not self.A:
+            self.A = int(self.display.text())
+            self.display.clear()
+            self.OP = "+"
+        else:
+            self.B = int(self.display.text())
+            self.display.setText(str(self.A+self.B))
+            
     def restar(self):
         self.pow = False
         self.raizC = False
@@ -141,11 +155,13 @@ class MiVentana(QMainWindow):
     def lower_Flag(self):
         self.pow = False
         self.raizC = False
+
     def set_Display_Text(self, text):
         if self.display.text() == "ERROR":
             self.display.setText("")
         digito=text
-
+        if text.isDigits():
+            self.digits = text
         if self.pow:
             self.display.setText(self.display.text()+ self.get_Sup(digito))
             self.digitPSindex += self.get_Sup(digito)
@@ -154,19 +170,23 @@ class MiVentana(QMainWindow):
         else:
             self.display.setText(self.display.text() + digito)
 
-        print(self.display.text())
-        equal = self.replacements(self.display.text())
-        try:
-            print(ast.literal_eval(equal))
-            print(equal)
-            if ast.literal_eval(equal):
-                if self.raizC:
-                    equal = f'{equal} **(0.5)'
-                equal = ast.literal_eval(equal)
-                self.label.setText(f'{equal:15G}'.replace('.', ','))
-        except:
-            self.label.setText(".....")
+        # print(self.display.text())
+        # equal = self.replacements(self.display.text())
+        # try:
+        #     print(ast.literal_eval(equal))
+        #     print(equal)
+        #     if ast.literal_eval(equal):
+        #         if self.raizC:
+        #             equal = f'{equal} **(0.5)'
+        #         equal = ast.literal_eval(equal)
+        #         self.label.setText(f'{equal:15G}'.replace('.', ','))
+        # except:
+        #     self.label.setText(".....")
     
+
+
+
+
     def replacements(self, var):
         operators =(
             ('÷', '/'),('×', '*'), 
