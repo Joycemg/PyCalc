@@ -84,20 +84,20 @@ class MiVentana(QMainWindow):
         return x.translate(res)
 
     def sumar(self):
-        self.pow = False
+        self.offPow()
         # self.raizC = False
         self.set_Display_Text("+")
 
     def restar(self):
-        self.pow = False
+        self.offPow()
         # self.raizC = False
         self.set_Display_Text("-")
     def multiplicacion(self):
-        self.pow = False
+        self.offPow()
         # self.raizC = False
         self.set_Display_Text("×")
     def division(self):
-        self.pow = False
+        self.offPow()
         # self.raizC = False
         if self.display.text() == '':
             self.display.setText("")
@@ -112,8 +112,8 @@ class MiVentana(QMainWindow):
     def potencia(self):
         self.raizC = False
         if self.display.text():
-            self.set_Display_Text('')
             self.pow = True
+
 
     def comma(self):
         if self.display.text() == '':
@@ -139,7 +139,15 @@ class MiVentana(QMainWindow):
             self.clear_Display()
             self.expression = ''
 
+    def offPow(self):
+        if self.pow:
+            self.dicSup[self.digitPNumber] = self.digitPSindex
+            self.digitPSindex = ''
+            self.digitPNumber = ''
+            self.pow = False
+
     def result(self):
+        self.offPow()
         equals = self.display.text()
         equals = self.replacements(equals)
         equals = self.arithmetic(equals)
@@ -162,9 +170,6 @@ class MiVentana(QMainWindow):
             self.display.setText("ERROR")
 
         self.expression = str(equals)
-        self.digitPNumber = ''
-        self.digitPSindex = ''
-        self.lower_Flag()
 
     def search(self, equal):
         for i  in range(0, self.historial.count()):
@@ -187,22 +192,15 @@ class MiVentana(QMainWindow):
             self.display.setText("")
         digito=text
 
-
-        print(self.expression)
-
         if self.pow:
             self.display.setText(self.display.text()+ self.get_Sup(digito))
             self.expression += self.get_Sup(digito)
             self.digitPSindex += self.get_Sup(digito)
             self.digitPNumber += digito
-            self.dicSup[self.digitPNumber] = self.digitPSindex
         else:
             self.expression += digito
             self.display.setText(self.display.text() + digito)
         self.label.setText(self.expression)
-        print(self.dicSup)
-        self.digitPNumber = ''
-        self.digitPSindex = ''
         # print(self.display.text())
         # equal = self.replacements(self.display.text())
         # try:
@@ -227,10 +225,9 @@ class MiVentana(QMainWindow):
             var = re.sub(op[0], op[1], var)
 
         for i in self.dicSup:
-            print(i)
-            print(self.dicSup[i])
             if self.get_Sup(i) == self.dicSup[i]:
                 var = re.sub(self.dicSup[i], f'**{i}', var)
+                print(var)
         return var
 
 
