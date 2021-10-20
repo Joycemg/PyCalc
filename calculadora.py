@@ -200,6 +200,9 @@ class MiVentana(QMainWindow):
             self.expression += digito
             self.display.setText(self.display.text() + digito)
         self.label.setText(self.expression)
+        print(self.dicSup)
+        self.digitPNumber = ''
+        self.digitPSindex = ''
         # print(self.display.text())
         # equal = self.replacements(self.display.text())
         # try:
@@ -224,7 +227,9 @@ class MiVentana(QMainWindow):
             var = re.sub(op[0], op[1], var)
 
         for i in self.dicSup:
-            if self.dicSup[i] == self.digitPSindex:
+            print(i)
+            print(self.dicSup[i])
+            if self.get_Sup(i) == self.dicSup[i]:
                 var = re.sub(self.dicSup[i], f'**{i}', var)
         return var
 
