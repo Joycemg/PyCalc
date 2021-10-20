@@ -9,10 +9,6 @@ class MiVentana(QMainWindow):
         super().__init__()
         uic.loadUi("programacion_II/clase4/calculadoranew.ui", self)
         self.expression = ''
-        self.A = 0
-        self.B = 0
-        self.OP = ''
-        self.digits = ''
         self.botonC.clicked.connect(self.clear_Display)
         self.botonX.clicked.connect(self.delete_Digit)
         self.boton_Punto.clicked.connect(self.comma)
@@ -120,13 +116,13 @@ class MiVentana(QMainWindow):
 
     def comma(self):
         if self.display.text() == '':
-            self.set_Display_Text("0.")
+            self.set_Display_Text("0,")
         else:
-            self.set_Display_Text(".")
+            self.set_Display_Text(",")
 
     def clear_Display(self):
-        self.lower_Flag()
         self.display.clear()
+        self.expression = ''
         self.digitPNumber = ''
         self.digitPSindex = ''
 
@@ -136,48 +132,11 @@ class MiVentana(QMainWindow):
             self.digitPNumber = self.digitPNumber[:-1]
         if self.display.text():
             self.display.backspace()
+            self.expression = self.expression[:-1]
+            self.label.setText(self.expression)
         else:
             self.clear_Display()
-
-
-    # def super_Script(self, var):
-    #     for i in self.dicPotencia:
-    #         if i == var:
-    #             var = re.sub( i,self.dicPotencia[i], var)
-    #     return var
-    # def op(self, var):
-    #     equal = ''
-    #     equal = self.expression.split(var)
-    #     x1 = int(equal[0])
-    #     x2 = int(equal[1])
-    #     return x1, x2
-
-
-
-    # def terms_Op(self, var):
-    #     label = self.expression
-    #     if '+' in self.expression:
-    #         x1, x2 = self.op("+")
-    #         var.setText(str(x1+x2))
-    #     elif '-' in self.expression:
-    #         x1, x2 = self.op("-")
-    #         var.setText(str(x1-x2))
-    #     elif '×' in self.expression:
-    #         x1, x2 = self.op("×")
-    #         var.setText(str(x1*x2))
-    #     elif '÷' in self.expression:
-    #         x1, x2 = self.op("÷")
-    #         if x1 == 0 or x2 == 0:
-    #             var.setText('')
-    #         else:
-    #             var.setText(str(x1/x2))
-
-    #     elif self.pow:
-    #         x1, x2 = self.op(" ")
-    #         var.setText(str(x1**x2))
-
-    #     self.expression = self.display.text()
-    #     self.label.setText(f'{label} = {self.expression}')
+            self.expression = ''
 
     def result(self):
         equals = self.display.text()
@@ -201,6 +160,7 @@ class MiVentana(QMainWindow):
         except:
             self.display.setText("ERROR")
 
+        self.expression = str(equals)
         self.digitPNumber = ''
         self.digitPSindex = ''
         self.lower_Flag()
