@@ -21,7 +21,7 @@ class MiVentana(QMainWindow):
         self.botonMenos.clicked.connect(self.restar)
         self.botonMulti.clicked.connect(self.multiplicacion)
         self.botonDivi.clicked.connect(self.division)
-        # self.botonRaiz.clicked.connect(self.raizCuadrada)
+        self.botonRaiz.clicked.connect(self.raizCuadrada)
         self.botonPoten.clicked.connect(self.potencia)
         self.botonResultado.clicked.connect(self.result)
         #Numeros
@@ -49,7 +49,8 @@ class MiVentana(QMainWindow):
             ast.Sub: operator.sub,
             ast.Mult: operator.mul,
             ast.Div: operator.truediv,
-            ast.Mod: operator.mod
+            ast.Mod: operator.mod,
+            ast.Pow: operator.pow
         }
 
         unOps = {
@@ -83,35 +84,35 @@ class MiVentana(QMainWindow):
         return x.translate(res)
 
     def sumar(self):
-        # self.pow = False
+        self.pow = False
         # self.raizC = False
         self.set_Display_Text("+")
 
     def restar(self):
-        # self.pow = False
+        self.pow = False
         # self.raizC = False
         self.set_Display_Text("-")
     def multiplicacion(self):
-        # self.pow = False
+        self.pow = False
         # self.raizC = False
         self.set_Display_Text("×")
     def division(self):
-        # self.pow = False
+        self.pow = False
         # self.raizC = False
         if self.display.text() == '':
             self.display.setText("")
         else:
             self.set_Display_Text("÷")
 
-    # def raizCuadrada(self):
-    #     self.pow = False
-    #     self.raizC= True
-    #     self.set_Display_Text('√')
+    def raizCuadrada(self):
+        self.pow = False
+        self.raizC= True
+        self.set_Display_Text('√')
 
     def potencia(self):
         self.raizC = False
         if self.display.text():
-            self.set_Display_Text(' ')
+            self.set_Display_Text('')
             self.pow = True
 
     def comma(self):
@@ -178,9 +179,8 @@ class MiVentana(QMainWindow):
         self.display.setText(expression)
 
     def lower_Flag(self):
-        # self.pow = False
-        # self.raizC = False
-        pass
+        self.pow = False
+        self.raizC = False
 
     def set_Display_Text(self, text):
         if self.display.text() == "ERROR":
@@ -188,17 +188,18 @@ class MiVentana(QMainWindow):
         digito=text
 
 
-        self.expression += digito
-        self.label.setText(self.expression)
         print(self.expression)
 
         if self.pow:
             self.display.setText(self.display.text()+ self.get_Sup(digito))
+            self.expression += self.get_Sup(digito)
             self.digitPSindex += self.get_Sup(digito)
             self.digitPNumber += digito
             self.dicSup[self.digitPNumber] = self.digitPSindex
         else:
+            self.expression += digito
             self.display.setText(self.display.text() + digito)
+        self.label.setText(self.expression)
         # print(self.display.text())
         # equal = self.replacements(self.display.text())
         # try:
@@ -216,9 +217,9 @@ class MiVentana(QMainWindow):
     def replacements(self, var):
         operators =(
             ('÷', '/'),('×', '*'),
-            (',', '.'),('%', '/100'),
-            ('√', ''))
-
+            (',', '.'),('%', '/100')
+            )
+# ('√', 'math(')
         for op in operators:
             var = re.sub(op[0], op[1], var)
 
