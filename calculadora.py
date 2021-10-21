@@ -38,7 +38,7 @@ class MiVentana(QMainWindow):
         self.digitPSindex = ''
         self.digitPNumber = ''
         self.pow = False
-        # self.raizC = False
+        self.raizC = False
 # √
         self.dicSup = {}
 
@@ -85,24 +85,27 @@ class MiVentana(QMainWindow):
 
     def sumar(self):
         self.offPow()
-        # self.raizC = False
-        self.set_Display_Text("+")
+        self.set_Display_Text(" + ")
 
     def restar(self):
         self.offPow()
         # self.raizC = False
-        self.set_Display_Text("-")
+        self.set_Display_Text(" - ")
     def multiplicacion(self):
         self.offPow()
         # self.raizC = False
-        self.set_Display_Text("×")
+        self.set_Display_Text(" × ")
     def division(self):
         self.offPow()
         # self.raizC = False
         if self.display.text() == '':
             self.display.setText("")
         else:
-            self.set_Display_Text("÷")
+            self.set_Display_Text(" ÷ ")
+
+    def right(self,str):
+        str = str[1:] + str[0]
+        return str
 
     def raizCuadrada(self):
         self.offPow()
@@ -110,7 +113,6 @@ class MiVentana(QMainWindow):
         self.set_Display_Text('√')
 
     def potencia(self):
-        self.raizC = False
         if self.display.text():
             self.pow = True
 
@@ -146,16 +148,25 @@ class MiVentana(QMainWindow):
             self.digitPNumber = ''
             self.pow = False
 
+    def offRc(self):
+        if self.raizC:
+            rc = self.expression.split()
+            print(rc)
+            for i in range(len(rc)):
+                if "√" in rc[i]:
+                    rc[i] = self.right(rc[i])
+            self.expression = ''.join(rc)
+        self.raizC = False
+
+
     def result(self):
         self.offPow()
+        self.offRc()
         equals = self.expression
         equals = self.replacements(equals)
         equals = self.arithmetic(equals)
 
-        # if self.raizC:
-        #     equal = f'{equals}**(0.5)'
-        #     self.raizC = False
-
+ 
         try:
             equalStr = f'{equals:15G}'.replace('.', ',').strip()
             if not equalStr == self.display.text():
@@ -191,7 +202,6 @@ class MiVentana(QMainWindow):
         if self.display.text() == "ERROR":
             self.display.setText("")
         digito=text
-
         if self.pow:
             self.display.setText(self.display.text()+ self.get_Sup(digito))
             self.expression += self.get_Sup(digito)
@@ -199,20 +209,9 @@ class MiVentana(QMainWindow):
             self.digitPNumber += digito
         else:
             self.expression += digito
-            self.display.setText(self.display.text() + digito)
+            self.display.setText(self.display.text() + digito.strip())
         self.label.setText(self.expression)
-        # print(self.display.text())
-        # equal = self.replacements(self.display.text())
-        # try:
-        #     print(ast.literal_eval(equal))
-        #     print(equal)
-        #     if ast.literal_eval(equal):
-        #         if self.raizC:
-        #             equal = f'{equal} **(0.5)'
-        #         equal = ast.literal_eval(equal)
-        #         self.label.setText(f'{equal:15G}'.replace('.', ','))
-        # except:
-        #     self.label.setText(".....")
+
 
 
     def replacements(self, var):
@@ -220,8 +219,7 @@ class MiVentana(QMainWindow):
             ('÷', '/'),('×', '*'),
             (',', '.'),('%', '/100'),
             ('√', '**(0.5)'))
-# ('√', 'math(')
-#Posible cambiar de posicion el unicode adelante en self.expresion
+
         for op in operators:
             var = re.sub(op[0], op[1], var)
 
@@ -229,6 +227,7 @@ class MiVentana(QMainWindow):
             if self.get_Sup(i) == self.dicSup[i]:
                 var = re.sub(self.dicSup[i], f'**{i}', var)
                 print(var)
+        print(var)
         return var
 
 
