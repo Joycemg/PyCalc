@@ -74,7 +74,7 @@ class MiVentana(QMainWindow):
                 return unOps[type(node.op)](_eval(node.operand))
             else:
                 raise Exception('Unsupported type {}'.format(node))
-
+                
         return _eval(node.body)
 
     def get_Sup(self, x):
@@ -105,7 +105,7 @@ class MiVentana(QMainWindow):
             self.set_Display_Text("÷")
 
     def raizCuadrada(self):
-        self.pow = False
+        self.offPow()
         self.raizC= True
         self.set_Display_Text('√')
 
@@ -148,7 +148,7 @@ class MiVentana(QMainWindow):
 
     def result(self):
         self.offPow()
-        equals = self.display.text()
+        equals = self.expression
         equals = self.replacements(equals)
         equals = self.arithmetic(equals)
 
@@ -218,9 +218,10 @@ class MiVentana(QMainWindow):
     def replacements(self, var):
         operators =(
             ('÷', '/'),('×', '*'),
-            (',', '.'),('%', '/100')
-            )
+            (',', '.'),('%', '/100'),
+            ('√', '**(0.5)'))
 # ('√', 'math(')
+#Posible cambiar de posicion el unicode adelante en self.expresion
         for op in operators:
             var = re.sub(op[0], op[1], var)
 
