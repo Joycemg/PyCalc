@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QUndoStack
 from PyQt5 import uic
+from PyQt5.Qt import Qt
 from PyQt5.QtGui import QFont
 import re
 import ast, operator
@@ -42,6 +43,32 @@ class MiVentana(QMainWindow):
 # √
         self.dicSup = {}
 
+    def keyPressEvent(self, event):
+
+        if event.key() == Qt.Key_ParenLeft:self.set_Display_Text("(")
+        if event.key() == Qt.Key_ParenRight:self.set_Display_Text(")")
+        if event.key() == Qt.Key_Period:
+            self.comma()
+
+        if event.key() == Qt.Key_Slash:self.division()
+        if event.key() == Qt.Key_Dead_Circumflex:self.potencia()
+        if event.key() == Qt.Key_Percent:self.set_Display_Text("%")
+        if event.key() == Qt.Key_Asterisk:self.multiplicacion()
+        if event.key() == Qt.Key_Minus:self.restar()
+        if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:self.result()
+        if event.key() == Qt.Key_Plus:self.sumar()
+        if event.key() == Qt.Key_Backspace:self.delete_Digit()
+        if event.key() == Qt.Key_R:self.raizCuadrada()
+        if event.key() == Qt.Key_0:self.set_Display_Text("0")
+        if event.key() == Qt.Key_1:self.set_Display_Text("1")
+        if event.key() == Qt.Key_2:self.set_Display_Text("2")
+        if event.key() == Qt.Key_3:self.set_Display_Text("3")
+        if event.key() == Qt.Key_4:self.set_Display_Text("4")
+        if event.key() == Qt.Key_5:self.set_Display_Text("5")
+        if event.key() == Qt.Key_6:self.set_Display_Text("6")
+        if event.key() == Qt.Key_7:self.set_Display_Text("7")
+        if event.key() == Qt.Key_8:self.set_Display_Text("8")
+        if event.key() == Qt.Key_9:self.set_Display_Text("9")                
     def arithmetic(self,s):
         
         binOps = {
@@ -128,6 +155,8 @@ class MiVentana(QMainWindow):
         self.expression = ''
         self.digitPNumber = ''
         self.digitPSindex = ''
+        self.pow = False
+        self.raizC = False
 
     def delete_Digit(self):
         if self.pow:
