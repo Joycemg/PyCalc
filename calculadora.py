@@ -10,6 +10,7 @@ class MiVentana(QMainWindow):
         super().__init__()
         uic.loadUi("programacion_II/clase4/calculadoranew.ui", self)
         self.expression = ''
+        
         self.botonC.clicked.connect(self.clear_Display)
         self.botonX.clicked.connect(self.delete_Digit)
         self.boton_Punto.clicked.connect(self.comma)
@@ -36,13 +37,19 @@ class MiVentana(QMainWindow):
         self.boton_7.clicked.connect(lambda:self.set_Display_Text("7"))
         self.boton_8.clicked.connect(lambda:self.set_Display_Text("8"))
         self.boton_9.clicked.connect(lambda:self.set_Display_Text("9"))
+        self.check.clicked.connect(self.nC)
         self.digitPSindex = ''
         self.digitPNumber = ''
         self.pow = False
         self.raizC = False
-# √
+        self.AC = False
         self.dicSup = {}
 
+    def nC(self):
+        if self.AC:
+            self.AC = False
+        else:
+            self.AC = True
     def keyPressEvent(self, event):
 
         if event.key() == Qt.Key_ParenLeft:self.set_Display_Text("(")
@@ -191,13 +198,17 @@ class MiVentana(QMainWindow):
     def result(self):
         self.offPow()
         self.offRc()
-        equals = self.expression
+        equals = self.expression.strip()
         equals = self.replacements(equals)
         equals = self.arithmetic(equals)
 
  
         try:
-            equalStr = f'{equals:15G}'.replace('.', ',').strip()
+            if self.AC:
+                equalStr = f'{equals:100G}'.replace('.', ',').strip()
+            else:
+                equalStr = f'{equals}'.replace('.', ',').strip()
+
             if not equalStr == self.display.text():
                 self.historial.addItem(f'{self.display.text()}')
                 self.historial.addItem(f' {equalStr}')
@@ -227,6 +238,13 @@ class MiVentana(QMainWindow):
         self.pow = False
         self.raizC = False
 
+    # def thousand(self,n):
+    #     pattern = "(\d)(?=(\d{3})+(?!\d))"
+    #     repl = r"\1."
+    #     string = str(n)
+    #     num = re.sub(pattern, repl, string)
+    #     return num
+
     def set_Display_Text(self, text):
         if self.display.text() == "ERROR":
             self.display.setText("")
@@ -238,7 +256,8 @@ class MiVentana(QMainWindow):
             self.digitPNumber += digito
         else:
             self.expression += digito
-            self.display.setText(self.display.text() + digito.strip())
+            concat = self.display.text() + digito.strip()
+            self.display.setText(concat)
         self.label.setText(self.expression)
 
 
