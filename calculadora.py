@@ -213,7 +213,7 @@ class MiVentana(QMainWindow):
                 self.historial.addItem(f'{self.display.text()}')
                 self.historial.addItem(f' {equalStr}')
                 self.search(self.display.text())
-
+            equalStr = self.intento(equalStr)
             self.display.setText(equalStr)
 
 
@@ -238,13 +238,14 @@ class MiVentana(QMainWindow):
         self.pow = False
         self.raizC = False
 
-    # def thousand(self,n):
-    #     pattern = "(\d)(?=(\d{3})+(?!\d))"
-    #     repl = r"\1."
-    #     string = str(n)
-    #     num = re.sub(pattern, repl, string)
-    #     return num
+    def intento(self, n):
+        pattern = "(\d)(?=(\d{3})+(?!\d))"
+        repl = r"\1."
+        string = n
+        string = re.sub('\.','',string)
+        print(string)
 
+        return re.sub(pattern, repl, string)
     def set_Display_Text(self, text):
         if self.display.text() == "ERROR":
             self.display.setText("")
@@ -257,6 +258,7 @@ class MiVentana(QMainWindow):
         else:
             self.expression += digito
             concat = self.display.text() + digito.strip()
+            concat = self.intento(concat)
             self.display.setText(concat)
         self.label.setText(self.expression)
 
