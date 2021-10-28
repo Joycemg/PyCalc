@@ -18,6 +18,7 @@ Tiene todas las funciones de una calculadora básica:
     • Historial de operaciones 
     • Barrido total de la expresión.
     • Retroceso de dígitos
+    • Multiples Operaciones
     • Eventos por teclado
 
 Características:
