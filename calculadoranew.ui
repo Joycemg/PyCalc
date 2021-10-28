@@ -667,8 +667,27 @@
       </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="check">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="toolTip">
+         <string>Notacion CIentifica</string>
+        </property>
         <property name="text">
          <string>AC</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="check2">
+        <property name="toolTip">
+         <string>Separador de miles</string>
+        </property>
+        <property name="text">
+         <string>ThouSep</string>
         </property>
        </widget>
       </item>

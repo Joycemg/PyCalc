@@ -38,11 +38,13 @@ class MiVentana(QMainWindow):
         self.boton_8.clicked.connect(lambda:self.set_Display_Text("8"))
         self.boton_9.clicked.connect(lambda:self.set_Display_Text("9"))
         self.check.clicked.connect(self.nC)
+        self.check2.clicked.connect(self.sT)
         self.digitPSindex = ''
         self.digitPNumber = ''
         self.pow = False
         self.raizC = False
         self.AC = False
+        self.ST = False
         self.dicSup = {}
 
     def nC(self):
@@ -50,6 +52,11 @@ class MiVentana(QMainWindow):
             self.AC = False
         else:
             self.AC = True
+    def sT(self):
+        if self.ST:
+            self.ST= False
+        else:
+            self.ST = True
     def keyPressEvent(self, event):
 
         if event.key() == Qt.Key_ParenLeft:self.set_Display_Text("(")
@@ -211,9 +218,13 @@ class MiVentana(QMainWindow):
 
             if not equalStr == self.display.text():
                 self.historial.addItem(f'{self.display.text()}')
-                self.historial.addItem(f' {equalStr}')
+                if self.ST:
+                    self.historial.addItem(f' {self.intento(equalStr)}')
+                else:
+                    self.historial.addItem(f' {equalStr}')
                 self.search(self.display.text())
-            equalStr = self.intento(equalStr)
+            if self.ST:
+                equalStr = self.intento(equalStr)
             self.display.setText(equalStr)
 
 
@@ -258,7 +269,8 @@ class MiVentana(QMainWindow):
         else:
             self.expression += digito
             concat = self.display.text() + digito.strip()
-            concat = self.intento(concat)
+            if self.ST:
+                concat = self.intento(concat)
             self.display.setText(concat)
         self.label.setText(self.expression)
 
